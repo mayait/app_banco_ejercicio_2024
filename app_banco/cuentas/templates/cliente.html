@@ -51,57 +51,30 @@
 
 
     <main role="main" class="container">
-      <h1 class="mt-5">Cuenta de <a href="/cliente/{{cuenta.cliente.id}}">{{cuenta.cliente.nombre}} {{cuenta.cliente.apellido}}</a> </h1>
+      <h1 class="mt-5">Cliente {{cliente.id}} {{cliente.nombre}} {{cliente.apellido}}</h1>
       <p class="lead">
-        Cuenta: # {{cuenta.id}}
-        <br>
-        Saldo: ${{cuenta.saldo}}
-
+        Cedula: # {{cliente.cedula}}
+      
       </p>
 
       <table class="table">
         <thead>
            <tr>
-               <th>Fecha y Hora</th>
-               <th>Monto</th>
-               <th>Tipo</th>
-               <th>Descripción</th>
+               <th>No Cuenta</th>
+               <th>Saldo</th>
            </tr>
         </thead>
-       {% for m in movimientos %}
+       {% for c in cliente.cuentas.all %}
            <tr>
-               <td>{{m.fecha_y_hora}}</td>
-               <td>${{m.monto}}</td>
-               <td>{{m.tipo}}</td>
-               <td>{{m.descripcion}}</td>
+               <td><a href="/movimientos/{{c.id}}">Cuenta {{c.id}}</a></td>
+               <td>${{c.saldo}}</td>
            </tr>
        
        </li>
        {% endfor %}
        </table>
 
-       <h1>Transferir</h1>
-       <hr>
-
-       <form action="http://localhost:8000/transferir" method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-          <label  for="cuenta_destino">Cuenta Destino</label>
-          <input name="cuenta_destino" type="text" class="form-control" id="cuenta_destino"  placeholder="# Cuenta data-target">
-        </div>
-        <div class="form-group">
-          <label for="monto">Monto</label>
-          <input name="monto" type="text" class="form-control" id="monto"  placeholder="Monto">
-        </div>
-        <div class="form-group">
-          <label for="descripcion">Descripción</label>
-          <input name="descripcion" type="text" class="form-control" id="descripcion"  placeholder="Descripcion">
-        </div>
-        <input name="cuenta_origen" type="text" hidden="True" value="{{cuenta.id}}">
-
-        
-        <button type="submit" class="btn btn-primary">Transferir</button>
-      </form>
+       
 
     </main>
 

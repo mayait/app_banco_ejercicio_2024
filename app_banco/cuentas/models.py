@@ -11,7 +11,7 @@ class Cliente(models.Model):
 
 
 class Cuenta(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='cuentas')
     saldo = models.DecimalField(max_digits=10, decimal_places=2)
 
     def transferir(self, monto, cuenta_destino, descripcion):
