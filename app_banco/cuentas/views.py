@@ -1,12 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+
 from .models import Cuenta, Movimiento, Cliente
 from .forms import ClienteForm
 import decimal
 
+@login_required
+def home(request):
+    user = request.user
+    contenido = {
+        'user': user
+    }
+    return render(request, 'home.html', contenido)
 
+@login_required
 def ver_movimientos(request, cuenta_id):
     cuenta = get_object_or_404(Cuenta, id = cuenta_id)
+    if cuenta.cliente.user != request.user and not request.user.is_superuser:
+        return HttpResponse("No tienes acceso a esta cuenta")
+    
     movimientos = cuenta.movimientos.all()
     contenido = {
         'cuenta': cuenta,
@@ -68,7 +81,7 @@ def nuevo_cliente(request):
 def editar_cliente(request, cliente_id):
     ## NO FUNCIONA
     ## NO PUEDO PASAR LA INSTANCIA DEL CLIENTE AL FORMULARIO
-    
+
     mensaje_error = ""
     cliente = get_object_or_404(Cliente, id=cliente_id)
     # Procesa el formulario para un nuevo cliente
